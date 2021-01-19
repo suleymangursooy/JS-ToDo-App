@@ -26,7 +26,7 @@ const removeTodo = (id) => {
 }
 
 const generateTodoDOM = (todos) =>{
-    todos.forEach((todos) => {
+    todos.forEach( (todo) => {
         
         const todoElement = document.createElement('label');
         const containerEl = document.createElement('div');
@@ -65,4 +65,29 @@ const generateTodoDOM = (todos) =>{
 
         document.querySelector('#todos').appendChild(todoElement);
     })
+}
+
+const getSummaryDOM = (todos) => {
+    const summary = document.createElement('h2');
+    const completedTodos = todos.filter( (todo) => !todo.completed);
+    summary.classList.add('list-title')
+    if (completedTodos.length > 1){
+    summary.textContent = `You have ${completedTodos.length} todos left`;
+    } else {
+    summary.textContent = `You have ${completedTodos.length} todo left`;
+    }
+    document.querySelector('#todos').appendChild(summary);
+}
+
+const renderTodos = (todos, filters) => {
+    document.querySelector('#todos').innerHTML = '';
+
+    let filteredTodos = todos.filter( (todo) => todo.text.toLowerCase().includes(filters.searchText.toLowerCase()));
+
+    if(filters.hideCompleted){
+        filteredTodos = todos.filter((todo) => todo.completed === !filters.hideCompleted);
+    };
+
+    getSummaryDOM(filteredTodos);
+    generateTodoDOM(filteredTodos);
 }
